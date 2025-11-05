@@ -19,15 +19,27 @@ selectBtn.addEventListener("click", () => {
   window.electronAPI?.selectBLEDevice(selectedDeviceId);
 });
 
+cancelBtn.addEventListener("click",  ()=>{
+  window.electronAPI?.cancelBLEDevice();
+  listEl.innerHTML = "";
+});
+
+// 监听主进程发送的设备列表
+window.electronAPI?.onBLEDeviceList((_evt, deviceList) => {
+  // 清空旧选项（可选）
+  listEl.innerHTML = "";
+
+  deviceList.forEach(device => {
+    const option = document.createElement("option");
+    option.value = device.deviceId;     // 选项值
+    option.textContent  = `${device.deviceName || "未知设备"} (${device.deviceId})`; // 显示的文字
+    listEl.appendChild(option);
+
+  });
+
+});
 
 
-
-
-
-
-
-console.log("蓝牙ble测试");
- 
  
 var _gatt;
 var _service;
@@ -40,15 +52,6 @@ var CHRCT_UUID_CUBE = '0000fff6' + UUID_SUFFIX;
 var decoder = null;
 var deviceMac = 'CC:A3:00:00:D2:D3';
 var KEYS = ['NoDg7ANAjGkEwBYCc0xQnADAVgkzGAzHNAGyRTanQi5QIFyHrjQMQgsC6QA'];
-
-
-
-
-
-
-
-
-
 
 scenBtn.addEventListener("click", async () => {
   try {
@@ -78,50 +81,11 @@ scenBtn.addEventListener("click", async () => {
     _chrct_cube.addEventListener('characteristicvaluechanged', onCubeEvent);
     console.log('已订阅数据通知 ✅');
 
-
-
-
-
-
-
-
-
-
   } catch (err) {
     console.error("❌ 请求失败:", err);
   }
 });
 
-
-cancelBtn.addEventListener("click",  ()=>{
-  window.electronAPI?.cancelBLEDevice();
-  listEl.innerHTML = "";
-});
-
-
-// 监听主进程发送的设备列表
-window.electronAPI?.onBLEDeviceList((_evt, deviceList) => {
-  // 清空旧选项（可选）
-  listEl.innerHTML = "";
-
-  deviceList.forEach(device => {
-    const option = document.createElement("option");
-    option.value = device.deviceId;     // 选项值
-    option.textContent  = `${device.deviceName || "未知设备"} (${device.deviceId})`; // 显示的文字
-    listEl.appendChild(option);
-
-  });
-
-});
-
-
-
-
-
- 
-
- 
- 
   //数据处理函数
   function onCubeEvent(event) {
     console.log("aaaaaaaaaaaaaaaa");
