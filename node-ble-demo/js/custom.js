@@ -8,6 +8,7 @@ $(function(){
 
    $scenBtn.click(function(){
        console.log("kk");
+       window.services.startScanning();
   });
  
    // 开始写 jQuery 代码...
