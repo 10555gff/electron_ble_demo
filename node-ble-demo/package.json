@@ -1,6 +1,8 @@
 {
   "type": "commonjs",
   "dependencies": {
-    "@abandonware/noble": "^1.9.2-26"
+    "@abandonware/noble": "^1.9.2-26",
+    "node-web-bluetooth": "^1.2.1",
+    "webbluetooth": "^3.3.2"
   }
 }
