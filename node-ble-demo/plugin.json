@@ -1,7 +1,7 @@
 {
 	"main": "index.html",
 	"logo": "logo.jpg",
-	"preload": "preload2.js",
+	"preload": "preload.js",
 	"features": [
 		{
 		  "code": "数据库快速录入",
