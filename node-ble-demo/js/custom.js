@@ -7,11 +7,11 @@ $(function(){
 
 
    $scenBtn.click(function(){
-       console.log("kk");
+       console.log(" 开始写 jQuery 代码");
        window.services.startScanning();
   });
  
-   // 开始写 jQuery 代码...
+   //...
   
  
 });
