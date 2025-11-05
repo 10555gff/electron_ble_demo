@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 
-let selectCallback = null;
+let bluetoothCallback = null;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -23,7 +23,7 @@ const createWindow = () => {
 
   mainWindow.webContents.on("select-bluetooth-device", (event, deviceList, callback) => {
     event.preventDefault();
-    selectCallback = callback;
+    bluetoothCallback = callback;
     mainWindow.webContents.send("ble-device-list", deviceList);
     console.log("Bluetooth device list dispatched.");
   });
@@ -31,19 +31,16 @@ const createWindow = () => {
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 
-  // 当用户在自定义窗口选择了设备
+  // 当用户在自定义窗口选择了连接设备
   ipcMain.on("ble-device-selected", (_evt, deviceId) => {
-    console.log(`✅ 用户选择aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa设备 ID: ${deviceId}`);
-
-    if (selectCallback) {
-      selectCallback(deviceId); // 建立连接
-      selectCallback = null;
-    }
+    console.log("Choose the Device ID: ${deviceId}.");
+    bluetoothCallback(deviceId);
   });
+
   // 用户取消选择
   ipcMain.on("ble-device-cancel", () => {
     console.log("User cancelled the requestDevice().");
-    selectCallback('')
+    bluetoothCallback('');
   });
 
 };
