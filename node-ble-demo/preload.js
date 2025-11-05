@@ -52,26 +52,28 @@ noble.on('discover', async (peripheral)=> {
 
           console.log('找到服务:', services[0]);
 
-          console.log('找到特征:', characteristics[0]);
+
+
+          cubeChar = characteristics[0];
+          console.log('找到特征:', cubeChar);
+
+                    // ========== 订阅通知（noble 方式）==========
+          if (cubeChar.properties.includes('notify') || cubeChar.properties.includes('indicate')) {
+            cubeChar.on('data', (data, isNotification) => {
+              console.log('收到数据:', data.toString('hex'));
+              onCubeEvent(data); // 你的处理函数
+            });
+
+            await cubeChar.subscribeAsync();
+            console.log('已订阅通知');
+          } else {
+            console.log('特征不支持通知');
+          }
 
 
 
         
 
-   
-      
-          // // 3. 获取 Service
-          // const service = await server.getPrimaryService(SERVICE_UUID);
-          // console.log('service:\n',service);
-      
-          // // 4. 获取 Characteristic
-          // const characteristic  = await service.getCharacteristic(CHRCT_UUID_CUBE);
-          // console.log('Characteristic:\n', characteristic);
-      
-          // 5. 订阅数据通知
-          _chrct_cube=await characteristics.startNotifications();
-          _chrct_cube.addEventListener('characteristicvaluechanged', onCubeEvent);
-          console.log('已订阅数据通知 ✅');
 
         } catch (err) {
           console.error("❌ 请求失败:", err);
