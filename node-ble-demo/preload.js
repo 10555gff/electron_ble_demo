@@ -27,37 +27,94 @@ var _chrct_cube;
 var UUID_SUFFIX = '-0000-1000-8000-00805f9b34fb';
 var SERVICE_UUID = '0000fff0' + UUID_SUFFIX;
 var CHRCT_UUID_CUBE = '0000fff6' + UUID_SUFFIX;
+const TARGET_NAME = 'QY-QYSC-S-D2D3';
+
 
 
 
 noble.on('discover', async (peripheral)=> {
     console.log('发现设备，名称：', peripheral.advertisement.localName);
-    if (peripheral.advertisement.localName === 'QY-QYSC-S-D2D3') {
-      
+    if (TARGET_NAME === peripheral.advertisement.localName) {
+      //targetDevice = peripheral;
+      await noble.stopScanningAsync();
+      console.log('找到目标设备，停止扫描，准备连接...');
 
-        //targetDevice = peripheral;
-        console.log('准备连接设备：', peripheral.advertisement.localName);
-        await noble.stopScanningAsync();
+
+      try {
+          console.log("开始连接");
+          await peripheral.connectAsync();
+          // 发现指定服务和特征
+          const { services, characteristics } = await peripheral.discoverSomeServicesAndCharacteristicsAsync(
+            [SERVICE_UUID],
+            [CHRCT_UUID_CUBE]
+          );
+          
+
+          console.log('找到服务:', services[0]);
+
+          console.log('找到特征:', characteristics[0]);
+
+
+
         
 
+   
+      
+          // // 3. 获取 Service
+          // const service = await server.getPrimaryService(SERVICE_UUID);
+          // console.log('service:\n',service);
+      
+          // // 4. 获取 Characteristic
+          // const characteristic  = await service.getCharacteristic(CHRCT_UUID_CUBE);
+          // console.log('Characteristic:\n', characteristic);
+      
+          // 5. 订阅数据通知
+          _chrct_cube=await characteristics.startNotifications();
+          _chrct_cube.addEventListener('characteristicvaluechanged', onCubeEvent);
+          console.log('已订阅数据通知 ✅');
 
-      await peripheral.connectAsync();
+        } catch (err) {
+          console.error("❌ 请求失败:", err);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       console.log('连接成功！');
 
-      // 发现指定服务和特征
-      const { services, characteristics } = await peripheral.discoverSomeServicesAndCharacteristicsAsync(
-        [SERVICE_UUID],
-        [CHRCT_UUID_CUBE]
-      );
 
-      if (characteristics.length === 0) {
-        console.log('未找到目标特征');
-        await peripheral.disconnectAsync();
-        process.exit(1);
-      }
 
-      const cubeChar = characteristics[0];
-      console.log('找到特征:', CHRCT_UUID_CUBE);
+
 
 
 
