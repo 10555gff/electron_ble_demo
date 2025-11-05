@@ -1,4 +1,4 @@
-const bluetooth = require('webbluetooth').bluetooth;
+const { bluetooth } = require('webbluetooth').bluetooth;
 
 
 console.log("蓝牙ble测试");
