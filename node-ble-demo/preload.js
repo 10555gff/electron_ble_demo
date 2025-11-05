@@ -20,18 +20,102 @@ window.services = {
 
 
 
+var _gatt;
+var _service;
+var _deviceName;
+var _chrct_cube;
+var UUID_SUFFIX = '-0000-1000-8000-00805f9b34fb';
+var SERVICE_UUID = '0000fff0' + UUID_SUFFIX;
+var CHRCT_UUID_CUBE = '0000fff6' + UUID_SUFFIX;
 
 
 
-noble.on('discover', function(peripheral) {
+noble.on('discover', async (peripheral)=> {
     console.log('发现设备，名称：', peripheral.advertisement.localName);
-    if (peripheral.advertisement.localName === 'Super Health-xxx') {
-        targetDevice = peripheral;
+    if (peripheral.advertisement.localName === 'QY-QYSC-S-D2D3') {
+      
+
+        //targetDevice = peripheral;
         console.log('准备连接设备：', peripheral.advertisement.localName);
-        noble.stopScanning();
-        connectToDevice();
+        await noble.stopScanningAsync();
+        
+
+
+      await peripheral.connectAsync();
+      console.log('连接成功！');
+
+      // 发现指定服务和特征
+      const { services, characteristics } = await peripheral.discoverSomeServicesAndCharacteristicsAsync(
+        [SERVICE_UUID],
+        [CHRCT_UUID_CUBE]
+      );
+
+      if (characteristics.length === 0) {
+        console.log('未找到目标特征');
+        await peripheral.disconnectAsync();
+        process.exit(1);
+      }
+
+      const cubeChar = characteristics[0];
+      console.log('找到特征:', CHRCT_UUID_CUBE);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //noble.stopScanningAsync();
+
+         //peripheral.connectAsync();
+
+        // const { services } = await peripheral.discoverAllServicesAndCharacteristicsAsync();
+        // services.forEach(s => {
+        //   console.log('Service:', s.uuid);
+        //   s.characteristics.forEach(c => {
+        //     console.log('  Char:', c.uuid, 'Props:', c.properties.join(','));
+        //   });
+        // });
+
+
+
+
+
+
+//        
+
+
+//         const { characteristics } =  peripheral.discoverSomeServicesAndCharacteristicsAsync(
+//           SERVICE_UUID,   // Battery Service
+//           CHRCT_UUID_CUBE   // Battery Level Characteristic
+//         );
+
+//  peripheral.disconnectAsync();
+
+//         console.log(characteristics);
+        // noble.connect(SERVICE_UUID,useCallback);
+        // peripheral.discoverServices(SERVICE_UUID, callback);
+        
+
     }
 });
+
+
+
+
+
 
 
 
