@@ -20,8 +20,10 @@ selectBtn.addEventListener("click", () => {
 });
 
 cancelBtn.addEventListener("click",  ()=>{
+  if(!selectedDeviceId)return;
   window.electronAPI?.cancelBLEDevice();
   listEl.innerHTML = "";
+  selectedDeviceId=null;
 });
 
 // 监听主进程发送的设备列表
@@ -36,7 +38,8 @@ window.electronAPI?.onBLEDeviceList((_evt, deviceList) => {
     listEl.appendChild(option);
 
   });
-
+  // 确保 UI 刷新
+  listEl.value = selectedDeviceId || deviceList[0]?.deviceId || "";
 });
 
 
