@@ -1,0 +1,6 @@
+{
+  "type": "commonjs",
+  "dependencies": {
+    "@abandonware/noble": "^1.9.2-26"
+  }
+}
