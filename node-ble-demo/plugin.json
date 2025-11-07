@@ -4,9 +4,9 @@
 	"preload": "preload.js",
 	"features": [
 		{
-		  "code": "数据库快速录入",
-		  "explain": "数据库快速录入工具",
-			"cmds":["数据","数据库", "数据库快速录入"]
+		  "code": "web_ble_demo",
+		  "explain": "webbluetooth",
+			"cmds":["ble","web_ble"]
 		}
 	]
 }
